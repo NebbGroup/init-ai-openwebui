@@ -70,6 +70,9 @@ async def send_get_request(url, key=None, user: UserModel = None):
                             "X-OpenWebUI-User-Id": user.id,
                             "X-OpenWebUI-User-Email": user.email,
                             "X-OpenWebUI-User-Role": user.role,
+                            "X-OpenWebUI-User-Business-Unit": user.info.get(
+                                "business_unit", "INIT_DEFAULT"
+                            ),
                         }
                         if ENABLE_FORWARD_USER_INFO_HEADERS and user
                         else {}

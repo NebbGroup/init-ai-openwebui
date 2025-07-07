@@ -534,6 +534,14 @@ async def signin(request: Request, response: Response, form_data: SigninForm):
             user.id, request.app.state.config.USER_PERMISSIONS
         )
 
+        # Set user business unit in userInfo if available
+        business_unit = "INIT_TEMPORARY"
+        # Extend user.info with business_unit, preserving existing info if present
+        if hasattr(user, "info") and isinstance(user.info, dict):
+            user.info["business_unit"] = business_unit
+            # Persist the updated info to the database
+            Users.update_user_by_id(user.id, {"info": user.info})
+
         return {
             "token": token,
             "token_type": "Bearer",
